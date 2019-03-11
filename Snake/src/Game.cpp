@@ -114,6 +114,7 @@ void Game::checkFruitCollision()
 {
 	if (snake_->getBounds().intersects(fruit_->getBounds()))
 	{
+		snake_->eatFruit();
 		spawnFruit();
 	}
 }

@@ -28,6 +28,9 @@ public:
 	void reset();
 	void setDir(dir direction);
 
+	void eatFruit();
+	void moveSegments();
+
 public:
 	sf::FloatRect getBounds()const { return head_.getGlobalBounds(); }
 	sf::Vector2i getGridPosOfSnake();
