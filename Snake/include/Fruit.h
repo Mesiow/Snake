@@ -10,8 +10,11 @@ public:
 	~Fruit();
 
 	void draw(sf::RenderTarget &target);
+	void spawn();
+
+public:
+	sf::FloatRect getBounds()const { return fruit_.getGlobalBounds(); }
 
 private:
 	sf::RectangleShape fruit_;
-	sf::Vector2f position_;
 };

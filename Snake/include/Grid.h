@@ -12,12 +12,12 @@ public:
 	static int getGridSize(){ return gridSize_; }
 	static int getWidth() { return width_; }
 	static int getHeight() { return height_; }
+    static int getGridIndex(int x, int y);
+
+	static sf::RectangleShape &gridAt(int index);
 
 private:
-	int getGridIndex(int x, int y);
-
-private:
-	std::vector<sf::RectangleShape> grid_;
+	static std::vector<sf::RectangleShape> grid_;
 
 	static int width_;
 	static int height_;

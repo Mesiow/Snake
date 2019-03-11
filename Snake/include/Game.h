@@ -28,6 +28,8 @@ private:
 
 	void createGameObjects();
 	void spawnFruit();
+	void checkBoundsCollision();
+	void checkFruitCollision();
 
 private:
 	static sf::RenderWindow *window_;

@@ -3,6 +3,7 @@
 int Grid::width_;
 int Grid::height_;
 int Grid::gridSize_;
+std::vector<sf::RectangleShape> Grid::grid_;
 
 Grid::Grid(int width, int height, int gridSize)
 {
@@ -39,4 +40,9 @@ void Grid::draw(sf::RenderTarget & target)
 int Grid::getGridIndex(int x, int y)
 {
 	return (y * width_) + x;
+}
+
+sf::RectangleShape &Grid::gridAt(int index)
+{
+	return grid_[index];
 }

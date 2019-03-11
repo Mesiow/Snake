@@ -6,7 +6,7 @@ Game::Game(const std::string &title)
 {
 	this->dt = 0.0f;
 	window_ = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), title, sf::Style::Default);
-	window_->setFramerateLimit(60);
+	window_->setFramerateLimit(10);
 
 	createGameObjects();
 }
@@ -40,6 +40,9 @@ void Game::run()
 void Game::update(float &dt)
 {
 	snake_->update(dt);
+
+	checkBoundsCollision();
+	checkFruitCollision();
 }
 
 void Game::pollEvents(sf::Event &e)
@@ -57,13 +60,13 @@ void Game::pollEvents(sf::Event &e)
 void Game::handleInput()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		snake_->setDir(0, -1);
+		snake_->setDir(dir::UP);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		snake_->setDir(-1, 0);
+		snake_->setDir(dir::LEFT);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		snake_->setDir(0, 1);
+		snake_->setDir(dir::DOWN);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		snake_->setDir(1, 0);
+		snake_->setDir(dir::RIGHT);
 }
 
 void Game::draw()
@@ -85,12 +88,25 @@ void Game::clear()
 
 void Game::createGameObjects()
 {
-	grid_ = new Grid(40, 30, 16);
+	grid_ = new Grid(40, 40, 16);
 	snake_ = new Snake(*grid_);
 	fruit_ = new Fruit(grid_->getWidth(), grid_->getHeight());
 }
 
 void Game::spawnFruit()
 {
+	fruit_->spawn();
+}
 
+void Game::checkBoundsCollision()
+{
+
+}
+
+void Game::checkFruitCollision()
+{
+	if (snake_->getBounds().intersects(fruit_->getBounds()))
+	{
+		spawnFruit();
+	}
 }

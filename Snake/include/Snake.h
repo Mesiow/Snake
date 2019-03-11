@@ -5,6 +5,16 @@
 #define SEGMENTS_SIZE 100
 
 class Grid;
+
+enum dir
+{
+	NONE=-1,
+	UP=0,
+	DOWN,
+	LEFT,
+	RIGHT
+};
+
 class Snake
 {
 public:
@@ -14,15 +24,20 @@ public:
 	void draw(sf::RenderTarget &target);
 	void update(float &dt);
 
-	void setDir(int xDir, int yDir);
+	void setDir(dir direction);
+
+public:
+	sf::FloatRect getBounds()const { return head_.getGlobalBounds(); }
 
 private:
 	sf::RectangleShape head_;
-	sf::RectangleShape tail_[SEGMENTS_SIZE];
+	std::vector<sf::RectangleShape> segments_;
 
-	sf::Vector2f position_;
-	sf::Vector2f dir_;
+	sf::Vector2f lastPosition_;
+	dir direction_;
 
 	float speed_;
 	int snakeSize_;
+
+
 };
