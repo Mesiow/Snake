@@ -22,6 +22,7 @@ public:
 private:
 	void update(float &dt);
 	void pollEvents(sf::Event &e);
+	void handleEvents(sf::Event &e);
 	void handleInput();
 	void draw();
 	void display();

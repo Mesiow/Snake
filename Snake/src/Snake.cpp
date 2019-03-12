@@ -33,23 +33,36 @@ void Snake::update(float &dt)
 	int gridPosY=segments_[HEAD].seg.getPosition().y / Grid::getGridSize(); //get grid position of snake
 
 	if (direction_ == dir::UP)
-		segments_[HEAD].seg.setPosition(gridPosX * Grid::getGridSize(), gridPosY * 
+	{
+		prevDir_ = UP;
+		segments_[HEAD].seg.setPosition(gridPosX * Grid::getGridSize(), gridPosY *
 			Grid::getGridSize() - Grid::getGridSize());
+	}
 	else if (direction_ == dir::LEFT)
+	{
+		prevDir_ = LEFT;
 		segments_[HEAD].seg.setPosition(gridPosX * Grid::getGridSize() - Grid::getGridSize(),
 			gridPosY * Grid::getGridSize());
+	}
 	else if (direction_ == dir::DOWN)
+	{
+		prevDir_ = DOWN;
 		segments_[HEAD].seg.setPosition(gridPosX * Grid::getGridSize(),
 			gridPosY * Grid::getGridSize() + Grid::getGridSize());
+	}
 	else if (direction_ == dir::RIGHT)
+	{
+		prevDir_ = RIGHT;
 		segments_[HEAD].seg.setPosition(gridPosX * Grid::getGridSize() + Grid::getGridSize(),
 			gridPosY * Grid::getGridSize());
+	}
 
 	moveSegments();
 }
 
 void Snake::reset()
 {
+	std::cout << "Reset called" << std::endl;
 	segments_.erase(segments_.begin() + 1, segments_.end());
 	nmberOfSegments_ = 0;
 
@@ -64,9 +77,37 @@ void Snake::setDir(dir direction)
 	direction_ = direction;
 }
 
+
+void Snake::checkIfBadMove()
+{
+	if (nmberOfSegments_ > 0)
+	{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			{
+				if (direction_ == DOWN)
+					reset();
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				if (direction_ == RIGHT)
+					reset();
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			{
+				if (direction_ == UP)
+					reset();
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			{
+				if (direction_ == LEFT)
+					reset();
+			}
+	}
+}
+
 void Snake::checkIfBitingItself()
 {
-	for (std::size_t i = 2; i < segments_.size(); i++) //start at 2 so we dont check the head 
+	for (std::size_t i = 2; i < segments_.size(); i++) //start at 2 so we dont check the head and first seg
 	{
 		int segPosX = segments_[i].seg.getPosition().x / Grid::getGridSize();
 		int segPosY = segments_[i].seg.getPosition().y / Grid::getGridSize();
@@ -103,7 +144,7 @@ void Snake::moveSegments()
 {
 	auto prevPos = getGridPosOfSnake();
 
-	for (std::size_t i = 0; i < segments_.size(); i++)
+	for (std::size_t i = 1; i < segments_.size(); i++)
 	{
 		int tempX = segments_[i].seg.getPosition().x / Grid::getGridSize();
 		int tempY = segments_[i].seg.getPosition().y / Grid::getGridSize();

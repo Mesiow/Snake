@@ -4,9 +4,8 @@
 Fruit::Fruit(int x, int y)
 {
 	fruit_.setSize(sf::Vector2f(Grid::getGridSize(), Grid::getGridSize()));
-
-	spawn();
 	fruit_.setFillColor(sf::Color::Red);
+	spawn();
 }
 
 Fruit::~Fruit()

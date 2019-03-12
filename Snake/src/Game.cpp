@@ -6,7 +6,7 @@ Game::Game(const std::string &title)
 {
 	this->dt = 0.0f;
 	window_ = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), title, sf::Style::Default);
-	window_->setFramerateLimit(10);
+	window_->setFramerateLimit(15);
 
 	createGameObjects();
 }
@@ -56,6 +56,7 @@ void Game::pollEvents(sf::Event &e)
 	}
 }
 
+
 void Game::handleInput()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -94,6 +95,7 @@ void Game::createGameObjects()
 
 void Game::updateGameLogic()
 {
+	snake_->checkIfBadMove();
 	snake_->checkIfBitingItself();
 	checkBoundsCollision();
 	checkFruitCollision();

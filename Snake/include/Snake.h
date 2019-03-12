@@ -27,12 +27,12 @@ class Snake
 public:
 	struct Segment
 	{
-		Segment(sf::Vector2f size,sf::Vector2f position=sf::Vector2f(0,0))
+		Segment(sf::Vector2f size,sf::Vector2f position=sf::Vector2f(0,0), sf::Color color=sf::Color::Green)
 			:position(position), size(size)
 		{
 			seg.setSize(size);
 			seg.setPosition(position);
-			seg.setFillColor(sf::Color::Green);
+			seg.setFillColor(color);
 		}
 
 		void draw(sf::RenderTarget &target)
@@ -54,6 +54,7 @@ public:
 	void reset();
 	void setDir(dir direction);
 
+	void checkIfBadMove();
 	void checkIfBitingItself();
 	void eatFruit();
 	void moveSegments();
@@ -66,8 +67,8 @@ public:
 private:
 	std::deque<Segment> segments_;
 
-	sf::Vector2f lastPosition_;
 	dir direction_;
+	dir prevDir_;
 
 	float speed_;
 	int snakeSize_;
