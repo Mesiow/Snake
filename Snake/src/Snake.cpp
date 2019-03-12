@@ -5,11 +5,13 @@
 Snake::Snake()
 {
 	this->snakeSize_ = Grid::getGridSize();
+	this->nmberOfSegments_ = 0;
 	head_.setFillColor(sf::Color::White);
 	head_.setSize(sf::Vector2f(snakeSize_, snakeSize_));
 
-	reset();
+	segments_.push_front(head_);
 	direction_ = NONE;
+	reset();
 }
 
 
@@ -20,34 +22,29 @@ Snake::~Snake()
 
 void Snake::draw(sf::RenderTarget & target)
 {
-	target.draw(head_);
-
 	for (int i = 0; i < segments_.size(); ++i)
 	{
 		target.draw(segments_[i]);
 	}
-
 }
 
 void Snake::update(float &dt)
 {
-    lastPosition_.x = head_.getPosition().x / Grid::getGridSize();
-	lastPosition_.y = head_.getPosition().y / Grid::getGridSize();
-
-	int gridPosX=head_.getPosition().x / Grid::getGridSize();
-	int gridPosY=head_.getPosition().y / Grid::getGridSize(); //get grid position of snake
+ 
+	int gridPosX=segments_[HEAD].getPosition().x / Grid::getGridSize();
+	int gridPosY=segments_[HEAD].getPosition().y / Grid::getGridSize(); //get grid position of snake
 
 	if (direction_ == dir::UP)
-		head_.setPosition(gridPosX * Grid::getGridSize(), gridPosY * 
+		segments_[HEAD].setPosition(gridPosX * Grid::getGridSize(), gridPosY * 
 			Grid::getGridSize() - Grid::getGridSize());
 	else if (direction_ == dir::LEFT)
-		head_.setPosition(gridPosX * Grid::getGridSize() - Grid::getGridSize(),
+		segments_[HEAD].setPosition(gridPosX * Grid::getGridSize() - Grid::getGridSize(),
 			gridPosY * Grid::getGridSize());
 	else if (direction_ == dir::DOWN)
-		head_.setPosition(gridPosX * Grid::getGridSize(),
+		segments_[HEAD].setPosition(gridPosX * Grid::getGridSize(),
 			gridPosY * Grid::getGridSize() + Grid::getGridSize());
 	else if (direction_ == dir::RIGHT)
-		head_.setPosition(gridPosX * Grid::getGridSize() + Grid::getGridSize(),
+		segments_[HEAD].setPosition(gridPosX * Grid::getGridSize() + Grid::getGridSize(),
 			gridPosY * Grid::getGridSize());
 
 	moveSegments();
@@ -57,7 +54,7 @@ void Snake::reset()
 {
 	int randPosX = Random::randomIntInRange(1, Grid::getWidth() - 1);
 	int randPosY = Random::randomIntInRange(1, Grid::getHeight() - 1);
-	head_.setPosition(sf::Vector2f(randPosX * Grid::getGridSize(),
+	segments_[HEAD].setPosition(sf::Vector2f(randPosX * Grid::getGridSize(),
 		randPosY * Grid::getGridSize()));  //place snake within the grid bounds
 }
 
@@ -68,29 +65,36 @@ void Snake::setDir(dir direction)
 
 void Snake::eatFruit()
 {
+    int gridPosX = segments_[HEAD].getPosition().x / Grid::getGridSize();
+	int gridPosY = segments_[HEAD].getPosition().y / Grid::getGridSize(); //get grid position of snake
+
 	sf::RectangleShape newSeg(sf::Vector2f(snakeSize_, snakeSize_));
 	newSeg.setFillColor(sf::Color::White);
-	segments_.push_back(newSeg);
+
+	segments_.push_back(newSeg); //add new segment
 }
 
 void Snake::moveSegments()
 {
-	for (std::size_t i = 1; i < segments_.size() + 1; i++)
-	{
-		segments_[i].setPosition(sf::Vector2f(lastPosition_.x * Grid::getGridSize(),
-			lastPosition_.y * Grid::getGridSize()));
+	auto prevPos = getGridPosOfSnake();
 
-		sf::Vector2f lastSegPos = segments_[i].getPosition();
-		int segPosX = lastSegPos.x / Grid::getGridSize() * Grid::getGridSize();
-		int segPosY = lastSegPos.y / Grid::getGridSize() * Grid::getGridSize();
-		segments_[i - 1].setPosition(segPosX, segPosY);
+	for (std::size_t i = 0; i < segments_.size(); i++)
+	{
+		auto tempX = segments_[i].getPosition().x / Grid::getGridSize();
+		auto tempY = segments_[i].getPosition().y / Grid::getGridSize();
+
+		segments_[i].setPosition(sf::Vector2f(prevPos.x * Grid::getGridSize(),
+				prevPos.y * Grid::getGridSize()));
+
+		prevPos.x = tempX;
+		prevPos.y = tempY;
 	}
 }
 
 sf::Vector2i Snake::getGridPosOfSnake()
 {
-	int x = head_.getPosition().x / Grid::getGridSize();
-	int y = head_.getPosition().y / Grid::getGridSize();
+	int x = segments_[HEAD].getPosition().x / Grid::getGridSize();
+	int y = segments_[HEAD].getPosition().y / Grid::getGridSize();
 
 	return sf::Vector2i(x, y);
 }

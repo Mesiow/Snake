@@ -16,6 +16,12 @@ enum dir
 	RIGHT
 };
 
+enum part
+{
+	HEAD=0,
+	TAIL,
+};
+
 class Snake
 {
 public:
@@ -32,7 +38,7 @@ public:
 	void moveSegments();
 
 public:
-	sf::FloatRect getBounds()const { return head_.getGlobalBounds(); }
+	sf::FloatRect getBounds()const { return segments_[HEAD].getGlobalBounds(); }
 	sf::Vector2i getGridPosOfSnake();
 
 
@@ -45,4 +51,5 @@ private:
 
 	float speed_;
 	int snakeSize_;
+	int nmberOfSegments_;
 };
