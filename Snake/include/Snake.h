@@ -54,10 +54,13 @@ public:
 	void reset();
 	void setDir(dir direction);
 
+
 	void checkIfBadMove(int &score);
 	void checkIfBitingItself(int &score);
 	void eatFruit();
 	void moveSegments();
+
+
 
 public:
 	sf::FloatRect getBounds()const { return segments_[HEAD].seg.getGlobalBounds(); }

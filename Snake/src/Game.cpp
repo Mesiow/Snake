@@ -7,7 +7,7 @@ Game::Game(const std::string &title)
 	this->dt = 0.0f;
 	this->score_ = 0;
 	window_ = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), title, sf::Style::Default);
-	window_->setFramerateLimit(15);
+	window_->setFramerateLimit(20);
 
 	createGameObjects();
 	initText();
@@ -128,11 +128,12 @@ void Game::spawnFruit()
 
 void Game::checkBoundsCollision()
 {
-	if (snake_->getGridPosOfSnake().x > grid_->getWidth() || //right bounds
-		snake_->getGridPosOfSnake().x < 0 ||
-		snake_->getGridPosOfSnake().y > grid_->getHeight() ||
-		snake_->getGridPosOfSnake().y < 0)
+	if (snake_->getGridPosOfSnake().x >= grid_->getWidth() || //right bounds
+		snake_->getGridPosOfSnake().x <= 0 ||
+		snake_->getGridPosOfSnake().y >= grid_->getHeight() ||
+		snake_->getGridPosOfSnake().y <= 0)
 	{
+		score_ = 0;
 		snake_->reset();
 	}
 }
