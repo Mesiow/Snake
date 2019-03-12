@@ -21,9 +21,7 @@ Snake::~Snake()
 void Snake::draw(sf::RenderTarget & target)
 {
 	for (int i = 0; i < segments_.size(); ++i)
-	{
 		segments_[i].draw(target);
-	}
 }
 
 void Snake::update(float &dt)
@@ -62,7 +60,6 @@ void Snake::update(float &dt)
 
 void Snake::reset()
 {
-	std::cout << "Reset called" << std::endl;
 	segments_.erase(segments_.begin() + 1, segments_.end());
 	nmberOfSegments_ = 0;
 
@@ -78,34 +75,46 @@ void Snake::setDir(dir direction)
 }
 
 
-void Snake::checkIfBadMove()
+void Snake::checkIfBadMove(int &score)
 {
 	if (nmberOfSegments_ > 0)
 	{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			{
 				if (direction_ == DOWN)
+				{
+					score = 0;
 					reset();
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
 				if (direction_ == RIGHT)
+				{
+					score = 0;
 					reset();
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			{
 				if (direction_ == UP)
+				{
+					score = 0;
 					reset();
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
 				if (direction_ == LEFT)
+				{
+					score = 0;
 					reset();
+				}
 			}
 	}
 }
 
-void Snake::checkIfBitingItself()
+void Snake::checkIfBitingItself(int &score)
 {
 	for (std::size_t i = 2; i < segments_.size(); i++) //start at 2 so we dont check the head and first seg
 	{
@@ -115,6 +124,7 @@ void Snake::checkIfBitingItself()
 		if (getGridPosOfSnake().x * Grid::getGridSize() == segPosX * Grid::getGridSize() &&
 			getGridPosOfSnake().y * Grid::getGridSize() == segPosY * Grid::getGridSize()) //collided with ourself
 		{
+			score = 0;
 			reset();
 		}
 	}

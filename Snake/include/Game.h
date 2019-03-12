@@ -22,11 +22,13 @@ public:
 private:
 	void update(float &dt);
 	void pollEvents(sf::Event &e);
-	void handleEvents(sf::Event &e);
 	void handleInput();
 	void draw();
 	void display();
 	void clear();
+
+	void initText();
+	void updateText();
 
 	void createGameObjects();
 	void updateGameLogic();
@@ -48,4 +50,7 @@ private:
 
 	int score_;
 	bool gameover_;
+
+	sf::Text scoreText_;
+	sf::Font scoreFont_;
 };

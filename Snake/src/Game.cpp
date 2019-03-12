@@ -5,10 +5,12 @@ sf::RenderWindow *Game::window_ = nullptr;
 Game::Game(const std::string &title)
 {
 	this->dt = 0.0f;
+	this->score_ = 0;
 	window_ = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), title, sf::Style::Default);
 	window_->setFramerateLimit(15);
 
 	createGameObjects();
+	initText();
 }
 
 Game::~Game()
@@ -42,6 +44,7 @@ void Game::update(float &dt)
 	snake_->update(dt);
 
 	updateGameLogic();
+	updateText();
 }
 
 void Game::pollEvents(sf::Event &e)
@@ -74,6 +77,8 @@ void Game::draw()
 	grid_->draw(*window_);
 	snake_->draw(*window_);
 	fruit_->draw(*window_);
+
+	window_->draw(scoreText_);
 }
 
 void Game::display()
@@ -86,6 +91,21 @@ void Game::clear()
 	window_->clear();
 }
 
+void Game::initText()
+{
+	if (!scoreFont_.loadFromFile("Fonts/Rubik.ttf"))
+		throw("Font failed to load");
+
+	scoreText_.setFont(scoreFont_);
+	scoreText_.setCharacterSize(15);
+	scoreText_.setPosition(20, HEIGHT - 20);
+}
+
+void Game::updateText()
+{
+	scoreText_.setString(std::string("Score: ") + std::to_string(score_));
+}
+
 void Game::createGameObjects()
 {
 	grid_ = new Grid();
@@ -95,8 +115,8 @@ void Game::createGameObjects()
 
 void Game::updateGameLogic()
 {
-	snake_->checkIfBadMove();
-	snake_->checkIfBitingItself();
+	snake_->checkIfBadMove(score_);
+	snake_->checkIfBitingItself(score_);
 	checkBoundsCollision();
 	checkFruitCollision();
 }
@@ -108,20 +128,20 @@ void Game::spawnFruit()
 
 void Game::checkBoundsCollision()
 {
-	if (snake_->getGridPosOfSnake().x > grid_->getWidth()) //right bounds
+	if (snake_->getGridPosOfSnake().x > grid_->getWidth() || //right bounds
+		snake_->getGridPosOfSnake().x < 0 ||
+		snake_->getGridPosOfSnake().y > grid_->getHeight() ||
+		snake_->getGridPosOfSnake().y < 0)
+	{
 		snake_->reset();
-	else if (snake_->getGridPosOfSnake().x < 0)
-		snake_->reset();
-	else if (snake_->getGridPosOfSnake().y > grid_->getHeight())
-		snake_->reset();
-	else if (snake_->getGridPosOfSnake().y < 0)
-		snake_->reset();
+	}
 }
 
 void Game::checkFruitCollision()
 {
 	if (snake_->getBounds().intersects(fruit_->getBounds()))
 	{
+		score_++;
 		snake_->eatFruit();
 		spawnFruit();
 	}

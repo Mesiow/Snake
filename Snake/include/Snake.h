@@ -54,8 +54,8 @@ public:
 	void reset();
 	void setDir(dir direction);
 
-	void checkIfBadMove();
-	void checkIfBitingItself();
+	void checkIfBadMove(int &score);
+	void checkIfBitingItself(int &score);
 	void eatFruit();
 	void moveSegments();
 
@@ -70,6 +70,7 @@ private:
 	dir direction_;
 	dir prevDir_;
 
+	int score_;
 	float speed_;
 	int snakeSize_;
 	int nmberOfSegments_;
