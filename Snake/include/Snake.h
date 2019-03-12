@@ -25,6 +25,26 @@ enum part
 class Snake
 {
 public:
+	struct Segment
+	{
+		Segment(sf::Vector2f size,sf::Vector2f position=sf::Vector2f(0,0))
+			:position(position), size(size)
+		{
+			seg.setSize(size);
+			seg.setPosition(position);
+			seg.setFillColor(sf::Color::Green);
+		}
+
+		void draw(sf::RenderTarget &target)
+		{
+			target.draw(seg);
+		}
+
+		sf::RectangleShape seg;
+		sf::Vector2f position;
+		sf::Vector2f size;
+
+	};
 	Snake();
 	~Snake();
 
@@ -34,17 +54,17 @@ public:
 	void reset();
 	void setDir(dir direction);
 
+	void checkIfBitingItself();
 	void eatFruit();
 	void moveSegments();
 
 public:
-	sf::FloatRect getBounds()const { return segments_[HEAD].getGlobalBounds(); }
+	sf::FloatRect getBounds()const { return segments_[HEAD].seg.getGlobalBounds(); }
 	sf::Vector2i getGridPosOfSnake();
 
 
 private:
-	sf::RectangleShape head_;
-	std::deque<sf::RectangleShape> segments_;
+	std::deque<Segment> segments_;
 
 	sf::Vector2f lastPosition_;
 	dir direction_;

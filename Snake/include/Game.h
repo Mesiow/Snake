@@ -6,7 +6,7 @@
 #include <iostream>
 
 #define WIDTH 490
-#define HEIGHT 500
+#define HEIGHT 520
 
 class Game
 {
@@ -28,6 +28,7 @@ private:
 	void clear();
 
 	void createGameObjects();
+	void updateGameLogic();
 	void spawnFruit();
 	void checkBoundsCollision();
 	void checkFruitCollision();
@@ -43,4 +44,7 @@ private:
 	Snake *snake_;
 	Grid *grid_;
 	Fruit *fruit_;
+
+	int score_;
+	bool gameover_;
 };

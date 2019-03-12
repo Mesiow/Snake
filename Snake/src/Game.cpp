@@ -41,8 +41,7 @@ void Game::update(float &dt)
 {
 	snake_->update(dt);
 
-	checkBoundsCollision();
-	checkFruitCollision();
+	updateGameLogic();
 }
 
 void Game::pollEvents(sf::Event &e)
@@ -91,6 +90,13 @@ void Game::createGameObjects()
 	grid_ = new Grid();
 	snake_ = new Snake();
 	fruit_ = new Fruit(grid_->getWidth(), grid_->getHeight());
+}
+
+void Game::updateGameLogic()
+{
+	snake_->checkIfBitingItself();
+	checkBoundsCollision();
+	checkFruitCollision();
 }
 
 void Game::spawnFruit()
